@@ -69,6 +69,20 @@ app.delete("/delete-movie/:title", (req, res) => {
   res.send(dbWithoutDeletion).status(204);
 });
 
+app.put("/modify-movie/:title", (req, res) => {
+  const arrOfModifiedMovies = db.map((movie) => {
+    if (movie.title.toLowerCase() === req.params.title.toLowerCase()) {
+      //Modify Bodyof element
+      const modifiedElement = { ...req.body, id: movie.id };
+      return modifiedElement;
+    }
+    return movie;
+  });
+  fs.writeFileSync("./db.json", JSON.stringify(arrOfModifiedMovies));
+  db = arrOfModifiedMovies;
+  res.send(arrOfModifiedMovies).status(202);
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });

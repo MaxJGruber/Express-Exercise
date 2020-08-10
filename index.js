@@ -60,6 +60,15 @@ function checksElementExistence(newDbElement) {
   return newDbElement;
 }
 
+app.delete("/delete-movie/:title", (req, res) => {
+  const dbWithoutDeletion = db.filter(
+    (movie) => movie.title.toLowerCase() !== req.params.title.toLowerCase()
+  );
+  fs.writeFileSync("./db.json", JSON.stringify(dbWithoutDeletion));
+  db = dbWithoutDeletion;
+  res.send(dbWithoutDeletion).status(204);
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
